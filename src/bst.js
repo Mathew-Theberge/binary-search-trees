@@ -6,7 +6,7 @@ class Node {
   }
 }
 
-class Tree {
+export class Tree {
   constructor(arr) {
     this.arr = mergeSort(removeDuplicates(arr));
     this.root = this.buildTree(this.arr, 0, this.arr.length - 1);
@@ -314,7 +314,7 @@ function removeDuplicates(arr) {
   return [...new Set(arr)];
 }
 
-const prettyPrint = (node, prefix = "", isLeft = true) => {
+export const prettyPrint = (node, prefix = "", isLeft = true) => {
   if (node === null) {
     return;
   }
@@ -326,19 +326,3 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
 };
-
-let arr = [1, 2, 3, 4];
-
-const tree = new Tree(arr);
-
-tree.deleteItem(1);
-tree.deleteItem(4);
-tree.insert(52);
-console.log(tree.height(tree.root.left));
-console.log(tree.height(tree.root.right));
-prettyPrint(tree.root);
-
-console.log(tree.isBalanced());
-tree.rebalance();
-console.log(tree.isBalanced());
-prettyPrint(tree.root);
