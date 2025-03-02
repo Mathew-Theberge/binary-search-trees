@@ -160,6 +160,42 @@ class Tree {
       queue.shift();
     }
   }
+
+  inorder(callback, node = this.root) {
+    if (typeof callback !== "function")
+      throw new Error("callback func is required");
+
+    if (this.root === null) return null;
+    if (node === null) return;
+
+    this.inorder(callback, node.left);
+    callback(node);
+    this.inorder(callback, node.right);
+  }
+
+  preorder(callback, node = this.root) {
+    if (typeof callback !== "function")
+      throw new Error("callback func is required");
+
+    if (this.root === null) return null;
+    if (node === null) return;
+
+    callback(node);
+    this.preorder(callback, node.left);
+    this.preorder(callback, node.right);
+  }
+
+  postorder(callback, node = this.root) {
+    if (typeof callback !== "function")
+      throw new Error("callback func is required");
+
+    if (this.root === null) return null;
+    if (node === null) return;
+
+    this.postorder(callback, node.left);
+    this.postorder(callback, node.right);
+    callback(node);
+  }
 }
 
 function mergeSort(arr) {
@@ -211,7 +247,7 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
-let arr = [1, 2, 3, 4, 5];
+let arr = [1, 2, 3, 4, 5, 6];
 
 const tree = new Tree(arr);
 
@@ -223,9 +259,9 @@ const tree = new Tree(arr);
 // tree.insert(4);
 // tree.insert(4);
 
-tree.insert(3);
-tree.insert(240);
-tree.insert(235);
+// tree.insert(3);
+// tree.insert(240);
+// tree.insert(235);
 
 // tree.deleteItem(31);
 // tree.deleteItem(3);
@@ -237,6 +273,7 @@ tree.insert(235);
 // tree.deleteItem(235);
 // console.log(tree.find(1));
 // console.log(tree.root);
-tree.levelOrderRec(console.log);
-tree.levelOrder(console.log);
-prettyPrint(tree.root);
+// tree.levelOrderRec(console.log);
+// tree.levelOrder(console.log);
+// prettyPrint(tree.root);
+tree.postorder(console.log);
