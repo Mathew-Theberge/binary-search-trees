@@ -24,6 +24,55 @@ class Tree {
 
     return root;
   }
+
+  insert(value, node = this.root) {
+    if (node === null) {
+      return new Node(value);
+    }
+
+    if (node.data === value) {
+      console.log("value already in tree");
+      return node;
+    }
+
+    if (value > node.data) {
+      node.right = this.insert(value, node.right);
+    } else {
+      node.left = this.insert(value, node.left);
+    }
+
+    return node;
+  }
+
+  deleteItem(value, node = this.root) {
+    if (node === null) return null;
+
+    if (value > node.data) {
+      node.right = this.deleteItem(value, node.right);
+    } else if (value < node.data) {
+      node.left = this.deleteItem(value, node.left);
+    } else {
+      if (node.left === null) {
+        return node.right;
+      }
+      if (node.right === null) {
+        return node.left;
+      }
+
+      let closestNode = this.findMin(node);
+      node.data = closestNode.data;
+      node.right = this.deleteItem(closestNode.data, node.right);
+    }
+    return node;
+  }
+
+  findMin(node) {
+    let closestRightNode = node.right;
+    while (closestRightNode.left !== null) {
+      closestRightNode = closestRightNode.left;
+    }
+    return closestRightNode;
+  }
 }
 
 function mergeSort(arr) {
@@ -75,10 +124,21 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
-let arr = [
-  7, 2, 1, 15, 16, 13, 31, 4, 7, 541, 352, 354, 24, 234, 234, 234, 23, 432, 4,
-];
+let arr = [1, 2, 3, 5, 6];
 
 const tree = new Tree(arr);
 
+// tree.insert(25);
+// tree.insert(26);
+// tree.insert(25);
+// tree.insert(27);
+// tree.insert(4);
+// tree.insert(4);
+// tree.insert(4);
+// tree.insert(3);
+// tree.insert(240);
+// tree.insert(235);
+
+tree.deleteItem(31);
+console.log(tree.root);
 prettyPrint(tree.root);
