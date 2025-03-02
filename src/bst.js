@@ -196,6 +196,13 @@ class Tree {
     this.postorder(callback, node.right);
     callback(node);
   }
+
+  height(node) {
+    if (node === null) return -1;
+    let leftheight = this.height(node.left);
+    let rightheight = this.height(node.right);
+    return Math.max(leftheight, rightheight) + 1;
+  }
 }
 
 function mergeSort(arr) {
@@ -247,33 +254,9 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
-let arr = [1, 2, 3, 4, 5, 6];
+let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const tree = new Tree(arr);
 
-// tree.insert(25);
-// tree.insert(26);
-// tree.insert(25);
-// tree.insert(27);
-// tree.insert(4);
-// tree.insert(4);
-// tree.insert(4);
-
-// tree.insert(3);
-// tree.insert(240);
-// tree.insert(235);
-
-// tree.deleteItem(31);
-// tree.deleteItem(3);
-// tree.deleteItem(1);
-// tree.deleteItem(4);
-// tree.deleteItem(2);
-// tree.deleteItem(5);
-// tree.deleteItem(240);
-// tree.deleteItem(235);
-// console.log(tree.find(1));
-// console.log(tree.root);
-// tree.levelOrderRec(console.log);
-// tree.levelOrder(console.log);
-// prettyPrint(tree.root);
-tree.postorder(console.log);
+prettyPrint(tree.root);
+console.log(tree.height(tree.root));
