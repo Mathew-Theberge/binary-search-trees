@@ -203,6 +203,12 @@ class Tree {
     let rightheight = this.height(node.right);
     return Math.max(leftheight, rightheight) + 1;
   }
+
+  depth(node) {
+    let maxHeight = this.height(this.root);
+    let nodeHeight = this.height(node);
+    return maxHeight - nodeHeight;
+  }
 }
 
 function mergeSort(arr) {
@@ -259,4 +265,3 @@ let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const tree = new Tree(arr);
 
 prettyPrint(tree.root);
-console.log(tree.height(tree.root));
