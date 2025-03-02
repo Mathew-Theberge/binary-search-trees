@@ -263,6 +263,19 @@ class Tree {
       return false;
     }
   }
+
+  rebalance() {
+    if (!this.isBalanced()) {
+      let array = [];
+      this.postorder((node) => {
+        array.push(node.data);
+      });
+      array = mergeSort(removeDuplicates(array));
+      this.root = this.buildTree(array, 0, array.length - 1);
+    } else {
+      console.log("tree is already balanced");
+    }
+  }
 }
 
 function mergeSort(arr) {
@@ -318,11 +331,14 @@ let arr = [1, 2, 3, 4];
 
 const tree = new Tree(arr);
 
-// tree.deleteItem(1);
+tree.deleteItem(1);
 tree.deleteItem(4);
-// tree.insert(52);
+tree.insert(52);
 console.log(tree.height(tree.root.left));
 console.log(tree.height(tree.root.right));
 prettyPrint(tree.root);
 
 console.log(tree.isBalanced());
+tree.rebalance();
+console.log(tree.isBalanced());
+prettyPrint(tree.root);
