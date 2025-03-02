@@ -73,6 +73,26 @@ class Tree {
     }
     return closestRightNode;
   }
+
+  find(value, node = this.root) {
+    if (node === null) return;
+    let currNode = node;
+
+    while (currNode.left !== null || currNode.right !== null) {
+      if (value > currNode.data) {
+        currNode = currNode.right;
+      } else if (value < currNode.data) {
+        currNode = currNode.left;
+      } else {
+        return currNode;
+      }
+    }
+    // leaf nodes dont get checked with the while loop code
+    // so we do a final check for equality before returning null
+    if (currNode.data === value) {
+      return currNode;
+    } else return null;
+  }
 }
 
 function mergeSort(arr) {
@@ -140,5 +160,7 @@ const tree = new Tree(arr);
 // tree.insert(235);
 
 tree.deleteItem(31);
-console.log(tree.root);
-prettyPrint(tree.root);
+
+console.log(tree.find(1));
+// console.log(tree.root);
+// prettyPrint(tree.root);
