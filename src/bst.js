@@ -26,6 +26,7 @@ class Tree {
   }
 
   insert(value, node = this.root) {
+    if (value === undefined) throw new Error("must provide valid value");
     // this is for a special case where the main root = null
     if (this.root === null) {
       this.root = new Node(value);
@@ -209,6 +210,59 @@ class Tree {
     let nodeHeight = this.height(node);
     return maxHeight - nodeHeight;
   }
+
+  isBalanced() {
+    if (this.root === null) return true;
+    let node = this.root;
+    let queue = [node];
+
+    while (queue.length) {
+      let currNode = queue[0];
+
+      if (!this.isNodeBalanced(currNode)) {
+        return false;
+      }
+
+      if (currNode.left !== null) {
+        queue.push(currNode.left);
+      }
+      if (currNode.right !== null) {
+        queue.push(currNode.right);
+      }
+      queue.shift();
+    }
+    return true;
+  }
+
+  isNodeBalanced(node) {
+    if (node.left === null) {
+      if (this.height(node.right) < 1) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    if (node.right === null) {
+      if (this.height(node.left) < 1) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    let leftTreeHeight = this.height(node.left);
+    let rightTreeHeight = this.height(node.right);
+
+    if (
+      leftTreeHeight === rightTreeHeight ||
+      leftTreeHeight === rightTreeHeight + 1 ||
+      leftTreeHeight === rightTreeHeight - 1
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 function mergeSort(arr) {
@@ -260,8 +314,15 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
-let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+let arr = [1, 2, 3, 4];
 
 const tree = new Tree(arr);
 
+// tree.deleteItem(1);
+tree.deleteItem(4);
+// tree.insert(52);
+console.log(tree.height(tree.root.left));
+console.log(tree.height(tree.root.right));
 prettyPrint(tree.root);
+
+console.log(tree.isBalanced());
