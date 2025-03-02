@@ -26,6 +26,12 @@ class Tree {
   }
 
   insert(value, node = this.root) {
+    // this is for a special case where the main root = null
+    if (this.root === null) {
+      this.root = new Node(value);
+      return;
+      //   this is the base case
+    }
     if (node === null) {
       return new Node(value);
     }
@@ -45,7 +51,24 @@ class Tree {
   }
 
   deleteItem(value, node = this.root) {
-    if (node === null) return null;
+    if (node === null) return node;
+    // this if block is for a very specific case where your deleting
+    // the top/main root node and it only has 1 subtree if this statement
+    // was not here the node skips the recursive call to set node.right
+    // or node.left and goes straight to the return node.right or left
+    // therefor returning the node to the main func call but never updating
+    // any values
+    if (value === this.root.data) {
+      if (this.root.left === null && this.root.right !== null) {
+        return (this.root = this.root.right);
+      }
+      if (this.root.right === null && this.root.left !== null) {
+        return (this.root = this.root.left);
+      }
+      if (this.root.right === null && this.root.left === null) {
+        return (this.root = null);
+      }
+    }
 
     if (value > node.data) {
       node.right = this.deleteItem(value, node.right);
@@ -68,7 +91,7 @@ class Tree {
 
   findMin(node) {
     let closestRightNode = node.right;
-    while (closestRightNode.left !== null) {
+    while (closestRightNode.left !== null && closestRightNode !== null) {
       closestRightNode = closestRightNode.left;
     }
     return closestRightNode;
@@ -92,6 +115,50 @@ class Tree {
     if (currNode.data === value) {
       return currNode;
     } else return null;
+  }
+
+  levelOrderRec(callback, queue = [this.root]) {
+    if (typeof callback !== "function")
+      throw new Error("callback func is required");
+
+    if (this.root === null) return null;
+    if (queue.length === 0) return;
+    let node = queue[0];
+
+    callback(node);
+    queue.shift();
+
+    if (node.left !== null) {
+      queue.push(node.left);
+    }
+    if (node.right !== null) {
+      queue.push(node.right);
+    }
+
+    this.levelOrderRec(callback, queue);
+  }
+
+  levelOrder(callback) {
+    if (callback === undefined || typeof callback !== "function")
+      throw new Error("callback func is required");
+
+    if (this.root === null) return;
+
+    let node = this.root;
+    let queue = [node];
+
+    while (queue.length) {
+      let currNode = queue[0];
+      callback(currNode);
+
+      if (currNode.left !== null) {
+        queue.push(currNode.left);
+      }
+      if (currNode.right !== null) {
+        queue.push(currNode.right);
+      }
+      queue.shift();
+    }
   }
 }
 
@@ -144,7 +211,7 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
-let arr = [1, 2, 3, 5, 6];
+let arr = [1, 2, 3, 4, 5];
 
 const tree = new Tree(arr);
 
@@ -155,12 +222,21 @@ const tree = new Tree(arr);
 // tree.insert(4);
 // tree.insert(4);
 // tree.insert(4);
-// tree.insert(3);
-// tree.insert(240);
-// tree.insert(235);
 
-tree.deleteItem(31);
+tree.insert(3);
+tree.insert(240);
+tree.insert(235);
 
-console.log(tree.find(1));
+// tree.deleteItem(31);
+// tree.deleteItem(3);
+// tree.deleteItem(1);
+// tree.deleteItem(4);
+// tree.deleteItem(2);
+// tree.deleteItem(5);
+// tree.deleteItem(240);
+// tree.deleteItem(235);
+// console.log(tree.find(1));
 // console.log(tree.root);
-// prettyPrint(tree.root);
+tree.levelOrderRec(console.log);
+tree.levelOrder(console.log);
+prettyPrint(tree.root);
